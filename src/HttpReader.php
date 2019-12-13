@@ -25,7 +25,7 @@ class HttpReader implements ReaderInterface {
 
     public function read(string $input): OfferCollectionInterface{
         $json = "";
-        if(file_exists($input)){
+        if($fp = curl_init($input)){
             $json = file_get_contents($input);
             $data = json_decode($json);
             if(!empty($data)){
@@ -33,6 +33,8 @@ class HttpReader implements ReaderInterface {
                     $this->offersCollection->add(new Offer($item));
                 }
             }
+        }else{
+            error_log("Error: $input doesn't exist");
         }
         return $this->offersCollection;
         
