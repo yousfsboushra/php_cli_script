@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace Metro;
+use \InvalidArgumentException;
 
 use PHPUnit\Framework\TestCase;
 
@@ -19,12 +20,9 @@ class HttpReaderTest extends TestCase{
     public function testReadFromInvalidEndpoint(): void{
         $offerCollection = new OfferCollection([]);
         $reader = new HttpReader($offerCollection);
+        
+        $this->expectException(InvalidArgumentException::class);
         $offersCollection = $reader->read("http://localhost/bad.php");
-
-        $this->assertInstanceOf(
-            OfferCollection::class,
-            $offersCollection
-        );
     }
 }
 ?>

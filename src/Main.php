@@ -31,6 +31,12 @@ class Main{
                     }
                 break;
             }
+            if(strpos($filters[1], "vendor_") !== false){
+                if(isset($filters[2])){
+                    $this->filters['vendor_key'] = str_replace("vendor_", "", $filters[1]);
+                    $this->filters['vendor_value'] = $filters[2];
+                }
+            }
         }
     }
 

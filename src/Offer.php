@@ -10,7 +10,7 @@ interface OfferInterface {
 class Offer implements OfferInterface {
     private $id;
     private $title;
-    private $vendor_id;
+    private $vendor;
     private $start_date;
     private $end_date;
     private $price;
@@ -19,7 +19,7 @@ class Offer implements OfferInterface {
     public function __construct($offer){
         $this->id = (isset($offer->id))? $offer->id : 0;
         $this->title = (isset($offer->title))? $offer->title : '';
-        $this->vendor_id = (isset($offer->vendor_id))? $offer->vendor_id : 0;
+        $this->vendor = (isset($offer->vendor))? $offer->vendor : 0;
         $this->start_date = (isset($offer->start_date))? $offer->start_date : '1970:01:01 00:00:00';
         $this->end_date = (isset($offer->end_date))? $offer->end_date : '1970:01:01 00:00:00';
         $this->price = (isset($offer->price))? $offer->price : -1;
@@ -56,7 +56,20 @@ class Offer implements OfferInterface {
             return 0;
         }
 
+        $vendorFilter = 1;
+        if(isset($filters['vendor_key']) && isset($filters['vendor_value'])){
+            if(!isset($this->vendor->{$filters['vendor_key']})){
+                return 0;
+            }else if($this->vendor->{$filters['vendor_key']} != $filters['vendor_value']){
+                return 0;
+            }
+        }
+
         return 1;
+    }
+
+    public function display(): void{
+        echo "$this->title costs $$this->price from $this->start_date untill $this->end_date" . PHP_EOL;
     }
 }
 ?>

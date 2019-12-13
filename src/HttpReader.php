@@ -1,5 +1,6 @@
 <?php
 namespace Metro;
+use \InvalidArgumentException;
 
 /**
 * The Interface provides the contract for different readers
@@ -25,7 +26,11 @@ class HttpReader implements ReaderInterface {
 
     public function read(string $input): OfferCollectionInterface{
         $json = "";
-        if($fp = curl_init($input)){
+        $file_headers = @get_headers($input);
+        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            error_log("Error: $input doesn't exist");
+            throw new InvalidArgumentException("Bad input");
+        }else{
             $json = file_get_contents($input);
             $data = json_decode($json);
             if(!empty($data)){
@@ -33,10 +38,7 @@ class HttpReader implements ReaderInterface {
                     $this->offersCollection->add(new Offer($item));
                 }
             }
-        }else{
-            error_log("Error: $input doesn't exist");
         }
         return $this->offersCollection;
-        
     }
 }
