@@ -8,3 +8,5 @@ composer.phar
 unitTest.log
 
 .env
+
+error.log

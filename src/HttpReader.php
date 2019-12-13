@@ -28,7 +28,7 @@ class HttpReader implements ReaderInterface {
         $json = "";
         $file_headers = @get_headers($input);
         if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
-            error_log("Error: $input doesn't exist");
+            error_log("Error: $input doesn't exist", 3, "error.log");
             throw new InvalidArgumentException("Bad input");
         }else{
             $json = file_get_contents($input);
